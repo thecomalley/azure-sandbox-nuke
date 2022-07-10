@@ -29,8 +29,8 @@ def get_client():
 def delete_rgs():
     client = get_client()
     transient_rgs = []
-    un_delteded_rgs = []
-    delteded_rgs = []
+    un_deleted_rgs = []
+    deleted_rgs = []
 
     for rg in client.resource_groups.list():
         if "oma" not in rg.name:
@@ -43,6 +43,9 @@ def delete_rgs():
 
                 except Exception as e:
                     logging.exception(e)
-                    un_delteded_rgs.append(rg.name)
+                    un_deleted_rgs.append(rg.name)
+                
+                else:
+                    deleted_rgs.append(rg.name)
 
-    return delteded_rgs, un_delteded_rgs
+    return deleted_rgs, un_deleted_rgs
