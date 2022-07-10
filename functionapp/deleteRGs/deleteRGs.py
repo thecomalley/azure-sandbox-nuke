@@ -34,25 +34,15 @@ def delete_rgs():
 
     for rg in client.resource_groups.list():
         if "oma" not in rg.name:
-            logging.info(f"Found rg: {rg.name}")
             transient_rgs.append(rg.name)
             
             if os.environ.get("MODE") == "desctructive":
                 try:
                     logging.info(f"Deleting rg: {rg.name}")
-                    delete_async_operation = client.resource_groups.begin_delete(rg.name)
-                    delete_async_operation.wait()
-                
-                except Exception as e:
-                    logging.error(f"Failed to delete rg: {rg.name}")
-                    un_delteded_rgs.append(rg.name)
-                    logging.error(e)
-                else:
-                    logging.info(f"Deleted rg: {rg.name}")
-                    delteded_rgs.append(rg.name)
+                    client.resource_groups.begin_delete(rg.name)
 
-    logging.info(f"Deleted {len(delteded_rgs)} Resoruce Groups")
-    if len(un_delteded_rgs) > 0:
-        logging.info(f"Failed to delete {len(un_delteded_rgs)} Resoruce Groups")
+                except Exception as e:
+                    logging.exception(e)
+                    un_delteded_rgs.append(rg.name)
 
     return delteded_rgs, un_delteded_rgs
