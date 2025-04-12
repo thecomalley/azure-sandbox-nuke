@@ -1,11 +1,15 @@
-# AzCleaner
+# Azure Nuke 💥
 
-Function app to scrub an Azure Dev/Test subscription keeping costs down!
+Function app to Nuke RGs from one or more Azure subscriptions keeping costs down!
 
-- Searches for Resource Groups that don't match string to keep long lived resources around
-- Posts to Discord with names of RGs that have been cleaned up
-- Uses System assigned Managed Identity for Auth
+- Scans for RGs that are missing a specific tag `KEY`
+- Supports multiple subscriptions
+- Notifies the user Pushover
 
-## Deployment
-- run `terraform apply` in `./terraform`
-- run `func azure functionapp publish {Function-App-Name}` in `./functionapp`
+This function app is deployed using the [terraform-azurerm-python-function](https://github.com/thecomalley/terraform-azurerm-python-function) module.
+
+## Deployment instructions
+
+1. `export ARM_SUBSCRIPTION_ID=<your-subscription-id>`
+2. `terraform init`
+3. `terraform apply`
