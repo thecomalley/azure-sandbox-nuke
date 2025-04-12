@@ -1,4 +1,4 @@
-# Azure Nuke 💥
+# Azure Sandbox Nuke 💥
 
 Function app to Nuke RGs from one or more Azure subscriptions keeping costs down!
 
