@@ -1,7 +1,8 @@
 data "azurerm_client_config" "current" {}
 
 locals {
-  subscription_ids_to_clean = join(",", var.subscription_ids_to_clean)
+  subscription_ids_to_clean        = coalescelist(var.subscription_ids_to_clean, [data.azurerm_client_config.current.tenant_id])
+  subscription_ids_to_clean_string = join(",", local.subscription_ids_to_clean)
 }
 
 module "terraform_azurerm_python_function" {
@@ -28,7 +29,7 @@ module "terraform_azurerm_python_function" {
   environment_variables = {
     WEBSITE_RUN_FROM_PACKAGE  = 1
     TAG_KEY                   = "WorkloadName"
-    SUBSCRIPTION_IDS_TO_CLEAN = coalesce(local.subscription_ids_to_clean, data.azurerm_client_config.current.tenant_id)
+    SUBSCRIPTION_IDS_TO_CLEAN = local.subscription_ids_to_clean_string
   }
 
   secret_environment_variables = [
@@ -37,6 +38,14 @@ module "terraform_azurerm_python_function" {
   ]
 
   tags = {
-    WorkloadName = "Nuke"
+    WorkloadName = "Azure Sandbox Nuke"
+    Environment  = "Production"
   }
+}
+
+resource "azurerm_role_assignment" "example" {
+  for_each             = toset(local.subscription_ids_to_clean)
+  scope                = "/subscriptions/${each.value}"
+  role_definition_name = "Contributor"
+  principal_id         = module.terraform_azurerm_python_function.principal_id
 }

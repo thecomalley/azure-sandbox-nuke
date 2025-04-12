@@ -8,7 +8,7 @@ from cleaner import clean_resource_groups
 app = func.FunctionApp()
 
 
-@app.timer_trigger(schedule="0 0 20 * * *", arg_name="myTimer", run_on_startup=True,
+@app.timer_trigger(schedule="0 30 9 * * *", arg_name="myTimer", run_on_startup=True,
                    use_monitor=False)
 def clean_rgs(myTimer: func.TimerRequest) -> None:
 

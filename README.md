@@ -2,9 +2,9 @@
 
 Function app to Nuke RGs from one or more Azure subscriptions keeping costs down!
 
-- Scans for RGs that are missing a specific tag `KEY`
+- Scans for RGs that are missing a specific tag `KEY` & deletes them
 - Supports multiple subscriptions
-- Notifies the user Pushover
+- Notifies the user via Pushover
 
 This function app is deployed using the [terraform-azurerm-python-function](https://github.com/thecomalley/terraform-azurerm-python-function) module.
 
