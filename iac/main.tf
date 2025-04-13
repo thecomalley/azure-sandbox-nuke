@@ -27,7 +27,6 @@ module "terraform_azurerm_python_function" {
   python_source_code_path = "../src"
 
   environment_variables = {
-    WEBSITE_RUN_FROM_PACKAGE  = 1
     TAG_KEY                   = "WorkloadName"
     SUBSCRIPTION_IDS_TO_CLEAN = local.subscription_ids_to_clean_string
   }
