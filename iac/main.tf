@@ -25,6 +25,14 @@ module "terraform_azurerm_python_function" {
 
   # must be a relative path to ${path.module}
   python_source_code_path = "../src"
+  python_source_code_excludes = [
+    ".venv",
+    ".git",
+    ".gitignore",
+    "pycache",
+    ".DS_Store",
+    "local.settings.json"
+  ]
 
   environment_variables = {
     TAG_KEY                   = "WorkloadName"
@@ -42,9 +50,9 @@ module "terraform_azurerm_python_function" {
   }
 }
 
-resource "azurerm_role_assignment" "example" {
-  for_each             = toset(local.subscription_ids_to_clean)
-  scope                = "/subscriptions/${each.value}"
+# Granting permissions at the Tenant Root Group 
+resource "azurerm_role_assignment" "contributor" {
+  scope                = "/providers/Microsoft.Management/managementGroups/${data.azurerm_client_config.current.tenant_id}"
   role_definition_name = "Contributor"
   principal_id         = module.terraform_azurerm_python_function.principal_id
 }
